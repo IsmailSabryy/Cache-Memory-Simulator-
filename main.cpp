@@ -127,7 +127,7 @@ void cachesimulatorline(string address, int cycles, int index, int disp, int tag
     cout << "Hit ratio: " << static_cast<double>(hits) / numofaccess << endl;
     double missrate = static_cast<double>(misses) / numofaccess;
     cout << "Miss ratio: " << missrate << endl;
-    cout << "AMAT: " << double(cycles) + double(memoryclock * missrate);
+    cout << "AMAT: " << double(cycles) + double(memoryclock * missrate) << endl;
 }
 int main()
 {
