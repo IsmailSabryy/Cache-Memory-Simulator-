@@ -1,0 +1,3 @@
+D:/AUC/Fall 2023/Digital Design/Project Github/Cache-Memory-Simulator-/cmake-build-debug/CMakeFiles/Cache_Memory_Simulator_.dir
+D:/AUC/Fall 2023/Digital Design/Project Github/Cache-Memory-Simulator-/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/AUC/Fall 2023/Digital Design/Project Github/Cache-Memory-Simulator-/cmake-build-debug/CMakeFiles/rebuild_cache.dir
