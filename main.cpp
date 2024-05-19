@@ -3,9 +3,104 @@
 #include <string>
 #include <fstream>
 #include <cmath>
+#include <windows.h>
+#include <conio.h>
 using namespace std;
 vector<pair<bool, string>> cache;
 int memoryclock = 100;
+char menu[4][45]={
+        {" 1]      Test   "},
+        {" 2]      Test  "},
+        {" 3]      Test          "},
+        {" 4]               Exit      "}
+};
+void ShowConsoleCursor(bool showFlag)
+{
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_CURSOR_INFO     cursorInfo;
+
+    GetConsoleCursorInfo(out, &cursorInfo);
+    cursorInfo.bVisible = showFlag; // set the cursor visibility
+    SetConsoleCursorInfo(out, &cursorInfo);
+}
+// function to locate cursor at row and col in screen
+void goto_row_col(int row,int col)
+{
+    COORD c;
+    c.X = col;
+    c.Y = row;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+}
+
+void setColor(int color)
+{
+    HANDLE hConsole;
+
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
+}
+
+void showMenu()
+{
+    char ch;
+    int pos=1;
+
+    do
+    {
+        ShowConsoleCursor(false);
+        setColor(15);
+        goto_row_col(10,39);cout << menu[0];
+        goto_row_col(11,39);cout << menu[1];
+        goto_row_col(12,39);cout << menu[2];
+        goto_row_col(13,39);cout << menu[3];
+        setColor(240);
+        goto_row_col(10+pos-1,39);cout << menu[pos-1];
+        ch = getch();
+        switch (ch)
+        {
+            case 13:
+                switch(pos)
+                {
+                    case 1:
+                        setColor(15);
+                        ShowConsoleCursor(true);
+                        system("cls");
+
+                        break;
+                    case 2:
+                        setColor(15);
+                        ShowConsoleCursor(true);
+                        system("cls");
+
+                        break;
+                    case 3:
+                        setColor(15);
+                        ShowConsoleCursor(true);
+
+                    case 4:
+                        setColor(15);
+                        ShowConsoleCursor(true);
+                        exit(0);
+                        break;
+                }
+                break;
+            case -32:
+                ch = getch();
+                switch (ch)
+                {
+                    case 72:
+                        pos--;
+                        if (pos ==0) pos =4;
+                        break;
+                    case 80:
+                        pos++;
+                        if (pos ==5) pos =1;
+                        break;
+                }
+        }
+    } while(true);
+}
 string strbin_to_dec(string binary)
 {
     int base = 1;
