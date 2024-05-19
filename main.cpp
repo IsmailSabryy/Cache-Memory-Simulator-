@@ -265,8 +265,6 @@ void showMenu()
         setColor(15);
         goto_row_col(10,39);cout << menu[0];
         goto_row_col(11,39);cout << menu[1];
-        goto_row_col(12,39);cout << menu[2];
-        goto_row_col(13,39);cout << menu[3];
         setColor(240);
         goto_row_col(10+pos-1,39);cout << menu[pos-1];
         ch = getch();
@@ -294,11 +292,11 @@ void showMenu()
                 {
                     case 72:
                         pos--;
-                        if (pos ==0) pos =4;
+                        if (pos ==0) pos =2;
                         break;
                     case 80:
                         pos++;
-                        if (pos ==5) pos =1;
+                        if (pos ==3) pos =1;
                         break;
                 }
         }
