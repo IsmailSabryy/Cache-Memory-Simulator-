@@ -5,6 +5,7 @@
 #include <cmath>
 using namespace std;
 vector<pair<bool, string>> cache;
+vector<pair<bool, string>> iCache;
 int memoryclock = 100;
 string strbin_to_dec(string binary)
 {
@@ -115,7 +116,7 @@ void cachesimulatorline(string address, int cycles, int index, int disp, int tag
         hits++;
     }
     cout << "============================================" << endl;
-    cout << "Cache memory after excecuting adress: " << address << endl;
+    cout << "Cache memory after excecuting Data adress: " << address << endl;
     for (auto &entry : cache)
     {
         cout << entry.first << "," << entry.second << endl;
@@ -127,7 +128,38 @@ void cachesimulatorline(string address, int cycles, int index, int disp, int tag
     cout << "Hit ratio: " << static_cast<double>(hits) / numofaccess << endl;
     double missrate = static_cast<double>(misses) / numofaccess;
     cout << "Miss ratio: " << missrate << endl;
-    cout << "AMAT: " << double(cycles) + double(memoryclock * missrate) << endl;
+    cout << "AMAT: " << double(cycles) + double(memoryclock * missrate) << "ns" << endl;
+}
+void Icachesimulatorline(string address, int cycles, int index, int disp, int tag, int &numofaccess, int &hits, int &misses)
+{
+    string binaryline = hexatobinary(address);
+    string tagbinary = binaryline.substr(0, tag);
+    string indexbinary = binaryline.substr(tag, index);
+    string dispbinary = binaryline.substr(tag + index, disp);
+    if (!iCache[stoi(strbin_to_dec(indexbinary))].first || iCache[stoi(strbin_to_dec(indexbinary))].second != tagbinary)
+    {
+        misses++;
+        iCache[stoi(strbin_to_dec(indexbinary))].first = true;
+        iCache[stoi(strbin_to_dec(indexbinary))].second = tagbinary;
+    }
+    else
+    {
+        hits++;
+    }
+    cout << "============================================" << endl;
+    cout << "Cache memory after excecuting Instruction adress: " << address << endl;
+    for (auto &entry : iCache)
+    {
+        cout << entry.first << "," << entry.second << endl;
+    }
+    numofaccess++;
+    cout << "Total number of accesses:" << numofaccess << endl;
+    cout << "Hits: " << hits << endl;
+    cout << "Misses: " << misses << endl;
+    cout << "Hit ratio: " << static_cast<double>(hits) / numofaccess << endl;
+    double missrate = static_cast<double>(misses) / numofaccess;
+    cout << "Miss ratio: " << missrate << endl;
+    cout << "AMAT: " << double(cycles) + double(memoryclock * missrate) << "ns" << endl;
 }
 int main()
 {
@@ -146,13 +178,22 @@ int main()
     index = log2(C);
     disp = log2(L);
     tag = 32 - index - disp;
-    cache.resize(C);
+    cache.resize(C); // ?
+    iCache.resize(C);
     for (int i = 0; i < C; i++)
     {
         cache[i].first = false;
         for (int j = 0; j < tag; j++)
         {
             cache[i].second += '0';
+        }
+    }
+    for (int i = 0; i < C; i++)
+    {
+        iCache[i].first = false;
+        for (int j = 0; j < tag; j++)
+        {
+            iCache[i].second += '0';
         }
     }
     numofaccess = 0;
@@ -162,7 +203,20 @@ int main()
     string fileline, address;
     while (getline(filereader, fileline))
     {
-        address = fileline;
-        cachesimulatorline(address, Cycles, index, disp, tag, numofaccess, hits, misses);
+        if (fileline[0] == 'd' || fileline[0] == 'D')
+        {
+            address = fileline.substr(1);
+            cachesimulatorline(address, Cycles, index, disp, tag, numofaccess, hits, misses);
+        }
+        else if (fileline[0] == 'i' || fileline[0] == 'I')
+        {
+            address = fileline.substr(1);
+            Icachesimulatorline(address, Cycles, index, disp, tag, numofaccess, hits, misses);
+        }
+        // else
+        // {
+        //     address = fileline;
+        //     cachesimulatorline(address, Cycles, index, disp, tag, numofaccess, hits, misses);
+        // }
     }
 }
